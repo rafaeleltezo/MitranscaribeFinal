@@ -1,5 +1,8 @@
 package com.app.master.mitranscaribe.Presentador;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -7,11 +10,9 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public interface iMainActivityPresentador {
-    public LatLng getCoordenadasUsuario();
-    public void mostrarCoordenadasUsuario();
     public boolean chequearPermiso();
     public void establecerPermiso();
-    public void agregarMarcadorUsuario(double lat,double lon);
+
 
 
 }

@@ -7,8 +7,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Boton de prueba"
-        android:id="@+id/boton"/>
+        android:text="@string/btnSuelo"
+        android:id="@+id/botonSuelo"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btnNormal"
+        android:id="@+id/botonNormal"/>
 
     <fragment
         android:id="@+id/map"

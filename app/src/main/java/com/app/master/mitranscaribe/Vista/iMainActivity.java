@@ -8,10 +8,10 @@ import com.google.android.gms.maps.MapFragment;
  */
 
 public interface iMainActivity {
-    public void configurarMapa(GoogleMap mapa);
+    public void configurarMapa();
     public MapFragment EstablecerFragementMapa();
     public void sincronizarMapa();
-
+    public void verDesdeSuelo();
 
 }
 
