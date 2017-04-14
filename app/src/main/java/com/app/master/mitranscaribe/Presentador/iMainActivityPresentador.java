@@ -10,9 +10,11 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public interface iMainActivityPresentador {
-    public boolean chequearPermiso();
-    public void establecerPermiso();
-
+    public void establecerFragmentMapa();
+    public void establecerGooglePlay();
+    public void establecerPermisos();
+    public void actualizarUbicacion();
+    public void superposicion();
 
 
 }
