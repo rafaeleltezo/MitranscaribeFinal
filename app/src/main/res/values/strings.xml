@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Mi transcaribe</string>
     <string name="miUbicacion">Mi Ubicacion</string>
-    <string name="btnSuelo">Ver desde abajo</string>
     <string name="btnNormal">ver Normal</string>
 </resources>

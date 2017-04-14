@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static final int PETICION_CONFIG_UBICACION=2;
     private iMainActivityPresentador presentador;
     private FloatingActionButton buttonSuelo;
-    private Button buttonNormal;
+    private FloatingActionButton buttonNormal;
     private LinearLayout lPrincipal;
     private double latitud;
     private double logitud;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         lPrincipal = (LinearLayout) findViewById(R.id.principal);
         buttonSuelo = (FloatingActionButton) findViewById(R.id.botonSuelo);
-        buttonNormal = (Button) findViewById(R.id.botonNormal);
+        buttonNormal = (FloatingActionButton) findViewById(R.id.botonNormal);
         buttonNormal.setVisibility(View.INVISIBLE);
         buttonSuelo.setOnClickListener(new View.OnClickListener() {
 
