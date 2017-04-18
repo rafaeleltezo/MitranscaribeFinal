@@ -23,6 +23,7 @@ public interface iMainActivity {
     public void sincronizarMapa();
     public void actualizarLocalizacion();
     public void startLocationUpdates();
+    public void addPosicionEstacion(double latitud,double longitud,String tituloEstacion);
 
 }
 

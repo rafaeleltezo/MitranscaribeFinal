@@ -14,6 +14,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.app.master.mitranscaribe.Modelo.Datos;
+import com.app.master.mitranscaribe.Modelo.Estaciones;
 import com.app.master.mitranscaribe.R;
 import com.app.master.mitranscaribe.Vista.iMainActivity;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,6 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 /**
  * Created by Rafael p on 10/4/2017.
  */
@@ -36,13 +40,12 @@ public class MainActivityPresentador implements iMainActivityPresentador {
 
     private Context context;
     private iMainActivity iMainActivity;
-    private Activity activity;
 
 
     public MainActivityPresentador(iMainActivity iMainActivity, Context context) {
         this.iMainActivity = iMainActivity;
         this.context = context;
-        this.activity = activity;
+
 
     }
 
@@ -75,6 +78,15 @@ public class MainActivityPresentador implements iMainActivityPresentador {
     @Override
     public void superposicion() {
         iMainActivity.superporicion();
+    }
+
+    @Override
+    public void agregarUbicacionEstacion() {
+        Datos datos=new Datos();
+        for (Estaciones  estacion :datos.getPosicionEstaciones()) {
+            iMainActivity.addPosicionEstacion(estacion.getLatitud(),estacion.getLongitud(),estacion.getNombre());
+
+        }
     }
 
 

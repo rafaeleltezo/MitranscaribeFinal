@@ -15,6 +15,7 @@ public interface iMainActivityPresentador {
     public void establecerPermisos();
     public void actualizarUbicacion();
     public void superposicion();
+    public void agregarUbicacionEstacion();
 
 
 }

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -42,8 +43,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import static com.app.master.mitranscaribe.R.id.btnActualizar;
 
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private double latitud;
     private double logitud;
     private LocationRequest locRequest;
+    private MarkerOptions marcadorMiPosicion;
 
 
     @Override
@@ -73,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         presentador.establecerGooglePlay();
         presentador.establecerPermisos();
 
-        presentador.superposicion();
+
+      //  presentador.superposicion();
         //Fin Agregando referencia Fragment
 
         //Configurando boton para ver desde el suelo
@@ -92,6 +99,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                // buttonSuelo.setEnabled(false);
                 actualizarLocalizacion();
 
+               /* MarkerOptions marcador=new MarkerOptions();
+                    mapa.addMarker(marcador.position(new LatLng(getLatitud(), getLogitud())).title(getString(R.string.miUbicacion)))
+                            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.punto_de_marcador_de_posicion_lleno));*/
+
+
             }
         });
         buttonNormal.setOnClickListener(new View.OnClickListener() {
@@ -105,10 +117,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
         configurarMapa(10.410664  ,-75.520964);
+        presentador.agregarUbicacionEstacion();
     }
 
     //investigar superpocision de permisoso
@@ -158,6 +172,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case CODIGO_PERMISO_LOCALIZACION:
                 if (chequearPermiso()) {
                     Toast.makeText(this, "Permiso de localizacion activo", Toast.LENGTH_LONG).show();
+                }else {
+                    establecerPermiso();
                 }
                 break;
 
@@ -230,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void verNormal(double lat, double lon) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(lat, lon))
-                    .zoom(16)
+                    .zoom(15)
                     .bearing(0)
                     .tilt(0)
                     .build();
@@ -302,11 +318,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void startLocationUpdates() {
         int estadoACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int estadoACCESS_COARSE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED && estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED) {
+        int estadoSYSTEM_ALERT_WINDOW = ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW);
+        if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED &&
+                estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED &&
+                estadoSYSTEM_ALERT_WINDOW ==PackageManager.PERMISSION_GRANTED) {
+
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     apiClient, locRequest, MainActivity.this);
+
+        }else {
+            establecerPermiso();
         }
 
+    }
+
+    @Override
+    public void addPosicionEstacion(double latitud, double longitud,String tituloEstacion) {
+        mapa.addMarker(new MarkerOptions().position(new LatLng(latitud,longitud)).title(tituloEstacion))
+                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.parada_de_autobus));
     }
 
     @Override
@@ -355,5 +384,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onLocationChanged(Location location) {
         Toast.makeText(this, "Ubicacion recibida", Toast.LENGTH_SHORT).show();
         setLocalizacion(location);
+
+
+            marcadorMiPosicion = new MarkerOptions();
+            mapa.addMarker(marcadorMiPosicion.position(new LatLng(getLatitud(), getLogitud())).title(getString(R.string.miUbicacion)))
+                    .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.punto_de_marcador_de_posicion_lleno));
+
+
+
+
+
     }
 }

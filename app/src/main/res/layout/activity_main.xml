@@ -4,10 +4,6 @@
     android:layout_height="match_parent"
     android:id="@+id/principal"
     android:orientation="vertical">
-
-
-
-
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -19,8 +15,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|right"
-                        android:orientation="vertical">
+                        android:layout_gravity="center_vertical|right"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="@dimen/botonFlotante">
 
 
                     <android.support.design.widget.FloatingActionButton
@@ -34,7 +31,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/botonSuelo"
-                        android:src="@drawable/marcador_de_posicion"
+                        android:src="@drawable/marcador"
                         android:elevation="@dimen/botonFlotante" />
                     </LinearLayout>
                 </fragment>
