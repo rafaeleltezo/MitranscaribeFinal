@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void configurarMapa(double lat, double lon) {
-        mapa.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(lat, lon))
                 .zoom(12)
@@ -385,13 +385,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, "Ubicacion recibida", Toast.LENGTH_SHORT).show();
         setLocalizacion(location);
 
-
             marcadorMiPosicion = new MarkerOptions();
             mapa.addMarker(marcadorMiPosicion.position(new LatLng(getLatitud(), getLogitud())).title(getString(R.string.miUbicacion)))
                     .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.punto_de_marcador_de_posicion_lleno));
 
-
-
+            verDesdeSuelo(getLatitud(),getLogitud());
+            mapa.setTrafficEnabled(true);
 
 
     }
