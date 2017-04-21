@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "346307654177",
+    "firebase_url": "https://mi-transcaribe.firebaseio.com",
+    "project_id": "mi-transcaribe",
+    "storage_bucket": "mi-transcaribe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346307654177:android:6e7915dd5b3e5aeb",
+        "android_client_info": {
+          "package_name": "com.app.master.mitranscaribe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346307654177-ri5bi24ip5iv2n4pf4n0tsq0hfh9cmb3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.master.mitranscaribe",
+            "certificate_hash": "d1478c57b1ce233fea8474adda3ab4916fa02c52"
+          }
+        },
+        {
+          "client_id": "346307654177-cn7ppg2j0e0n8hin1odbdu2b8nlpn4c6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdrFZ8UzMEJuRWYZwTOrJV0LPgW6lFiz8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346307654177-cn7ppg2j0e0n8hin1odbdu2b8nlpn4c6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

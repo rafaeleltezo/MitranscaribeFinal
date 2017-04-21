@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Agregarndo referencia de fragment al ActivityMAin
         presentador = new MainActivityPresentador(this,this);
         presentador.establecerFragmentMapa();
