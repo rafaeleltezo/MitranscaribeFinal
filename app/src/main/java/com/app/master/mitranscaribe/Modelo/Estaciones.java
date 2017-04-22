@@ -5,23 +5,23 @@ package com.app.master.mitranscaribe.Modelo;
  */
 
 public class Estaciones {
-    int id;
+    String id;
     double latitud;
     double Longitud;
     String tituloEstacion;
 
-    public Estaciones(int id, double latitud, double longitud, String nombre) {
+    public Estaciones(String id, double latitud, double longitud, String nombre) {
         this.id = id;
         this.latitud = latitud;
         Longitud = longitud;
         this.tituloEstacion = nombre;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

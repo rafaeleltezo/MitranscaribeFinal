@@ -1,5 +1,8 @@
 package com.app.master.mitranscaribe.Modelo;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 /**
@@ -10,10 +13,11 @@ public class Datos {
 
     public ArrayList<Estaciones> getPosicionEstaciones(){
         ArrayList<Estaciones>estaciones=new ArrayList<>();
-        estaciones.add(new Estaciones(10,3842245,-754583447,"coveñas"));
-        estaciones.add(new Estaciones(10,3842245,-754583457,"coveñas2"));
-        estaciones.add(new Estaciones(10,3842245,-754583467,"coveñas3"));
-        estaciones.add(new Estaciones(10,3842245,-754583477,"coveñas4"));
+        estaciones.add(new Estaciones("12",10.48966573,-75.4800319,"Castellana"));
+        estaciones.add(new Estaciones("12",10.3896657,-75.480031,"Portal"));
+        estaciones.add(new Estaciones("12",10.2896637,-75.4800329,"Bomba Gallo"));
+        estaciones.add(new Estaciones("21",10.689662,-75.4800119,"Maria Auxiliadora"));
         return estaciones;
     }
+
 }

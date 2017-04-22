@@ -49,6 +49,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static com.app.master.mitranscaribe.R.id.btnActualizar;
 
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
       //  presentador.superposicion();
+
         //Fin Agregando referencia Fragment
 
         //Configurando boton para ver desde el suelo
@@ -120,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
-        configurarMapa(10.410664  ,-75.520964);
+        configurarMapa(10.3898  ,-75.480);
         presentador.agregarUbicacionEstacion();
     }
 
@@ -221,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(lat, lon))
-                .zoom(12)
+                .zoom(10)
                 .bearing(0)
                 .tilt(0)
                 .build();
@@ -388,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mapa.addMarker(marcadorMiPosicion.position(new LatLng(getLatitud(), getLogitud())).title(getString(R.string.miUbicacion)))
                     .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.punto_de_marcador_de_posicion_lleno));
 
-            verDesdeSuelo(getLatitud(),getLogitud());
+            //verDesdeSuelo(getLatitud(),getLogitud());
             mapa.setTrafficEnabled(true);
 
 
