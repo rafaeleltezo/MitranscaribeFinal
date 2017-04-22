@@ -1,5 +1,7 @@
 package com.app.master.mitranscaribe.Modelo;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Rafael p on 15/4/2017.
  */
@@ -7,13 +9,20 @@ package com.app.master.mitranscaribe.Modelo;
 public class Estaciones {
     String id;
     double latitud;
-    double Longitud;
+    double longitud;
     String tituloEstacion;
 
+    public Estaciones(){
+        id="";
+        latitud=0;
+        longitud=0;
+        tituloEstacion="";
+
+    }
     public Estaciones(String id, double latitud, double longitud, String nombre) {
         this.id = id;
         this.latitud = latitud;
-        Longitud = longitud;
+        longitud = longitud;
         this.tituloEstacion = nombre;
     }
 
@@ -34,11 +43,11 @@ public class Estaciones {
     }
 
     public double getLongitud() {
-        return Longitud;
+        return longitud;
     }
 
     public void setLongitud(double longitud) {
-        Longitud = longitud;
+        longitud = longitud;
     }
 
     public String getNombre() {
