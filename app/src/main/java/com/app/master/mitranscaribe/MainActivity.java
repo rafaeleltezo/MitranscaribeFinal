@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
       //  presentador.superposicion();
 
         //Fin Agregando referencia Fragment
+        FirebaseDatabase fire=FirebaseDatabase.getInstance();
+        DatabaseReference dato=fire.getReference("Bus");
+        dato.child("01").child("Latitud");
+        
 
         //Configurando boton para ver desde el suelo
 
