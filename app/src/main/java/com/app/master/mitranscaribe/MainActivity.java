@@ -97,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         presentador.establecerPermisos();
         presentador.chekerInternet();
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Bus");
+        Toast.makeText(this, myRef.getKey().toString(), Toast.LENGTH_SHORT).show();
+
 
 
         buttonNormal = (FloatingActionButton) findViewById(R.id.botonNormal);
