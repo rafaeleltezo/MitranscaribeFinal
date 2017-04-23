@@ -19,10 +19,11 @@ public class Estaciones {
         tituloEstacion="";
 
     }
+
     public Estaciones(String id, double latitud, double longitud, String nombre) {
         this.id = id;
         this.latitud = latitud;
-        longitud = longitud;
+        this.longitud = longitud;
         this.tituloEstacion = nombre;
     }
 

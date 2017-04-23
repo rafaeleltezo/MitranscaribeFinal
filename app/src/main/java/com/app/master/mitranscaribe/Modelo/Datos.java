@@ -13,10 +13,10 @@ public class Datos {
 
     public ArrayList<Estaciones> getPosicionEstaciones(){
         ArrayList<Estaciones>estaciones=new ArrayList<>();
-        estaciones.add(new Estaciones("12",10.48966573,-75.4800319,"Castellana"));
-        estaciones.add(new Estaciones("12",10.3896657,-75.480031,"Portal"));
-        estaciones.add(new Estaciones("12",10.2896637,-75.4800329,"Bomba Gallo"));
-        estaciones.add(new Estaciones("21",10.689662,-75.4800119,"Maria Auxiliadora"));
+        estaciones.add(new Estaciones("12",10.3901017,-75.480396,"Plazuela"));
+        estaciones.add(new Estaciones("12",10.3842243,-75.4583624,"Portal"));
+        estaciones.add(new Estaciones("12",10.3842240,-75.4583627,"Bomba Gallo"));
+        estaciones.add(new Estaciones("21",10.3842249,-75.4583629,"Maria Auxiliadora"));
         return estaciones;
     }
 

@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * Created by Rafael p on 10/4/2017.
  */
 
-public class MainActivityPresentador implements iMainActivityPresentador {
+public class MainActivityPresentador  implements iMainActivityPresentador{
 
 
     private Context context;
@@ -54,7 +54,7 @@ public class MainActivityPresentador implements iMainActivityPresentador {
         iMainActivity.sincronizarMapa();
 
     }
-
+/*
     @Override
     public void establecerGooglePlay() {
         iMainActivity.getApiLocalizacion();
@@ -62,12 +62,13 @@ public class MainActivityPresentador implements iMainActivityPresentador {
 
     @Override
     public void establecerPermisos() {
-        if (!iMainActivity.chequearPermiso()) {
-            iMainActivity.establecerPermiso();
-        } else {
+            if (!iMainActivity.chequearPermiso()) {
+                Toast.makeText(context, "El permiso ha sido denegado", Toast.LENGTH_SHORT).show();
+            } else {
 
-            Toast.makeText(context, "Permisos otorgados", Toast.LENGTH_LONG).show();
-        }
+                iMainActivity.establecerPermiso();
+            }
+
     }
 
     @Override
@@ -80,6 +81,7 @@ public class MainActivityPresentador implements iMainActivityPresentador {
         iMainActivity.superporicion();
     }
 
+*/
     @Override
     public void agregarUbicacionEstacion() {
         Datos datos=new Datos();
@@ -88,6 +90,5 @@ public class MainActivityPresentador implements iMainActivityPresentador {
 
         }
     }
-
 
 }

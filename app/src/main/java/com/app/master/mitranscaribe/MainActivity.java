@@ -57,14 +57,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import static com.app.master.mitranscaribe.R.id.btnActualizar;
+import static com.app.master.mitranscaribe.R.id.map;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, iMainActivity, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,LocationListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, iMainActivity/*,GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener*/ {
+
     private GoogleMap mapa;
+    public static final int CODIGO_PERMISO_LOCALIZACION = 1;
+    private iMainActivityPresentador presentador;
+    /*
     private Location localizacion;
     private GoogleApiClient apiClient;
-    public static final int CODIGO_PERMISO_LOCALIZACION = 1;
-    public static final int PETICION_CONFIG_UBICACION=2;
-    private iMainActivityPresentador presentador;
+    public static final int PETICION_CONFIG_UBICACION = 2;
     private FloatingActionButton buttonSuelo;
     private FloatingActionButton buttonNormal;
     private LinearLayout lPrincipal;
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private double logitud;
     private LocationRequest locRequest;
     private MarkerOptions marcadorMiPosicion;
+    */
+
 
 
     @Override
@@ -79,21 +84,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Agregarndo referencia de fragment al ActivityMAin
-        presentador = new MainActivityPresentador(this,this);
-        presentador.establecerFragmentMapa();
+         presentador = new MainActivityPresentador(this, this);
+         presentador.establecerFragmentMapa();
+        /*presentador.establecerPermisos();
         presentador.establecerGooglePlay();
-        presentador.establecerPermisos();
-
-
-      //  presentador.superposicion();
-
-        //Fin Agregando referencia Fragment
-        FirebaseDatabase fire=FirebaseDatabase.getInstance();
-        DatabaseReference dato=fire.getReference("Bus");
-        dato.child("01").child("Latitud");
-        
-
-        //Configurando boton para ver desde el suelo
 
         lPrincipal = (LinearLayout) findViewById(R.id.principal);
         buttonSuelo = (FloatingActionButton) findViewById(R.id.botonSuelo);
@@ -103,15 +97,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onClick(View v) {
-                verDesdeSuelo(getLatitud(),getLogitud());
-                Toast.makeText(getBaseContext(),"Latitud= "+getLatitud()+" Longitud= "+getLogitud(),Toast.LENGTH_LONG).show();
+                verDesdeSuelo(getLatitud(), getLogitud());
+                Toast.makeText(getBaseContext(), "Latitud= " + getLatitud() + " Longitud= " + getLogitud(), Toast.LENGTH_LONG).show();
                 buttonNormal.setVisibility(View.VISIBLE);
-               // buttonSuelo.setEnabled(false);
+                // buttonSuelo.setEnabled(false);
                 actualizarLocalizacion();
-
-               /* MarkerOptions marcador=new MarkerOptions();
-                    mapa.addMarker(marcador.position(new LatLng(getLatitud(), getLogitud())).title(getString(R.string.miUbicacion)))
-                            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.punto_de_marcador_de_posicion_lleno));*/
 
 
             }
@@ -119,24 +109,38 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         buttonNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verNormal(getLatitud(),getLogitud());
+                verNormal(getLatitud(), getLogitud());
                 buttonSuelo.setEnabled(true);
                 buttonNormal.setVisibility(View.INVISIBLE);
-            }
-        });
-    }
+                desactivarLocalizacion();
 
+            }
+        });*/
+    }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
-        configurarMapa(10.3898  ,-75.480);
+        configurarMapa(10.3898, -75.480);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mapa.setMyLocationEnabled(true);
         presentador.agregarUbicacionEstacion();
     }
 
     //investigar superpocision de permisoso
-    @Override
+
+    /* @Override
     public void superporicion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             Toast.makeText(this, "Se necesita un permiso, acivelo a continuacion", Toast.LENGTH_SHORT).show();
@@ -147,9 +151,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean chequearPermiso() {
-        int estadoACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int estadoSYSTEM_ALERT_WINDOW = ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW);
-        int estadoACCESS_COARSE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int estadoACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int estadoSYSTEM_ALERT_WINDOW = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.SYSTEM_ALERT_WINDOW);
+        int estadoACCESS_COARSE_LOCATION = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
         if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED &&
                 estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED&&
                 estadoSYSTEM_ALERT_WINDOW == PackageManager.PERMISSION_GRANTED) {
@@ -158,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, "Permiso Denegado", Toast.LENGTH_LONG).show();
         return false;
     }
+
 
     @Override
     public void establecerPermiso() {
@@ -173,23 +178,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.SYSTEM_ALERT_WINDOW},
                     this.CODIGO_PERMISO_LOCALIZACION);
         }
-    }
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-
             case CODIGO_PERMISO_LOCALIZACION:
-                if (chequearPermiso()) {
+                /*if (chequearPermiso()) {
                     Toast.makeText(this, "Permiso de localizacion activo", Toast.LENGTH_LONG).show();
                 }else {
-                    establecerPermiso();
-                }
+                    Toast.makeText(this, "No esta activo el permiso", Toast.LENGTH_SHORT).show();
+                }*/
                 break;
 
         }
     }
 
+    /*
     @Override
     public void getApiLocalizacion() {
         apiClient = new GoogleApiClient.Builder(this)
@@ -226,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void setLogitud(double logitud) {
         this.logitud = logitud;
     }
-
+*/
     @Override
     public void configurarMapa(double lat, double lon) {
         mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -239,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         CameraUpdate camara = CameraUpdateFactory.newCameraPosition(cameraPosition);
         mapa.animateCamera(camara);
     }
-
+/*
     @Override
     public void verDesdeSuelo(double lat, double lon) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -264,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mapa.animateCamera(camara);
 
     }
-
+*/
     @Override
     public MapFragment EstablecerFragementMapa() {
         return (MapFragment) getFragmentManager()
@@ -276,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         EstablecerFragementMapa().getMapAsync(this);
 
     }
-
+/*
     @Override
     public void actualizarLocalizacion() {
         locRequest = new LocationRequest();
@@ -343,11 +348,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    public void desactivarLocalizacion() {
+         LocationServices.FusedLocationApi.removeLocationUpdates(
+                    apiClient, this);
+    }
+*/
+    @Override
     public void addPosicionEstacion(double latitud, double longitud,String tituloEstacion) {
         mapa.addMarker(new MarkerOptions().position(new LatLng(latitud,longitud)).title(tituloEstacion))
-                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.parada_de_autobus));
+                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estacion));
     }
-
+/*
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Snackbar.make(lPrincipal, "Error Grave al conectar los Servicios de Google Play", Snackbar.LENGTH_LONG).show();
@@ -395,13 +406,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, "Ubicacion recibida", Toast.LENGTH_SHORT).show();
         setLocalizacion(location);
 
-            marcadorMiPosicion = new MarkerOptions();
-            mapa.addMarker(marcadorMiPosicion.position(new LatLng(getLatitud(), getLogitud())).title(getString(R.string.miUbicacion)))
+            mapa.addMarker(marcadorMiPosicion=new MarkerOptions().position(new LatLng(getLatitud(), getLogitud())).title(getString(R.string.miUbicacion)))
                     .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.punto_de_marcador_de_posicion_lleno));
 
-            //verDesdeSuelo(getLatitud(),getLogitud());
+            verDesdeSuelo(getLatitud(),getLogitud());
             mapa.setTrafficEnabled(true);
 
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "Aplicacion pausada", Toast.LENGTH_SHORT).show();
+        desactivarLocalizacion();
+    }*/
 }

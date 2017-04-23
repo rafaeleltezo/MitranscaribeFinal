@@ -11,18 +11,19 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public interface iMainActivity {
-    public void superporicion();
-    public boolean chequearPermiso();
-    public void establecerPermiso();
-    public void getApiLocalizacion();
-    public void setLocalizacion(Location location);
+    //public void superporicion();
+    //public boolean chequearPermiso();
+    //public void establecerPermiso();
+    //public void getApiLocalizacion();
+    //public void setLocalizacion(Location location);
     public void configurarMapa(double lat,double lon);
-    public void verDesdeSuelo(double lat,double lon);
-    public void verNormal(double lat,double lon);
+    //public void verDesdeSuelo(double lat,double lon);
+    //public void verNormal(double lat,double lon);
     public MapFragment EstablecerFragementMapa();
     public void sincronizarMapa();
-    public void actualizarLocalizacion();
-    public void startLocationUpdates();
+    //public void actualizarLocalizacion();
+    //public void startLocationUpdates();
+    //public void desactivarLocalizacion();
     public void addPosicionEstacion(double latitud,double longitud,String tituloEstacion);
 
 }
