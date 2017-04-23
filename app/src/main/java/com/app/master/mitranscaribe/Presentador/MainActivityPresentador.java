@@ -54,34 +54,48 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
         iMainActivity.sincronizarMapa();
 
     }
-/*
-    @Override
-    public void establecerGooglePlay() {
-        iMainActivity.getApiLocalizacion();
-    }
+
 
     @Override
     public void establecerPermisos() {
-            if (!iMainActivity.chequearPermiso()) {
-                Toast.makeText(context, "El permiso ha sido denegado", Toast.LENGTH_SHORT).show();
-            } else {
 
                 iMainActivity.establecerPermiso();
-            }
 
     }
 
     @Override
-    public void actualizarUbicacion() {
-        iMainActivity.actualizarLocalizacion();
+    public void chekerInternet() {
+        if(!iMainActivity.chekearInternet()){
+            Toast.makeText(context, "No tiene internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public void superposicion() {
-        iMainActivity.superporicion();
+    public void agregarMiLocalizacion() {
+        if(iMainActivity.chequearPermiso()){
+        iMainActivity.miLocalizacion();
+        }else {
+            Toast.makeText(context, "Acive permisos para continuar", Toast.LENGTH_SHORT).show();
+            iMainActivity.establecerPermiso();
+        }
     }
 
-*/
+    /*
+        @Override
+        public void establecerGooglePlay() {
+            iMainActivity.getApiLocalizacion();
+        }
+        @Override
+        public void actualizarUbicacion() {
+            iMainActivity.actualizarLocalizacion();
+        }
+
+        @Override
+        public void superposicion() {
+            iMainActivity.superporicion();
+        }
+
+    */
     @Override
     public void agregarUbicacionEstacion() {
         Datos datos=new Datos();

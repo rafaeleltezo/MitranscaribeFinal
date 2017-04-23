@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -43,6 +44,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -56,7 +58,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.net.URI;
+
 import static com.app.master.mitranscaribe.R.id.btnActualizar;
+import static com.app.master.mitranscaribe.R.id.design_menu_item_action_area;
 import static com.app.master.mitranscaribe.R.id.map;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, iMainActivity/*,GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener*/ {
@@ -64,12 +69,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mapa;
     public static final int CODIGO_PERMISO_LOCALIZACION = 1;
     private iMainActivityPresentador presentador;
+    private FloatingActionButton buttonNormal;
+    private Marker marcador;
+
     /*
     private Location localizacion;
     private GoogleApiClient apiClient;
     public static final int PETICION_CONFIG_UBICACION = 2;
     private FloatingActionButton buttonSuelo;
-    private FloatingActionButton buttonNormal;
+
     private LinearLayout lPrincipal;
     private double latitud;
     private double logitud;
@@ -84,14 +92,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Agregarndo referencia de fragment al ActivityMAin
-         presentador = new MainActivityPresentador(this, this);
-         presentador.establecerFragmentMapa();
-        /*presentador.establecerPermisos();
-        presentador.establecerGooglePlay();
+        presentador = new MainActivityPresentador(this, this);
+        presentador.establecerPermisos();
+        presentador.establecerFragmentMapa();
+        presentador.chekerInternet();
+
+
+
+        buttonNormal = (FloatingActionButton) findViewById(R.id.botonNormal);
+        buttonNormal.setVisibility(View.INVISIBLE);
+        buttonNormal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ira();
+            }
+        });
+        /*presentador.establecerGooglePlay();
 
         lPrincipal = (LinearLayout) findViewById(R.id.principal);
         buttonSuelo = (FloatingActionButton) findViewById(R.id.botonSuelo);
-        buttonNormal = (FloatingActionButton) findViewById(R.id.botonNormal);
+
         buttonNormal.setVisibility(View.INVISIBLE);
         buttonSuelo.setOnClickListener(new View.OnClickListener() {
 
@@ -106,16 +126,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
-        buttonNormal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verNormal(getLatitud(), getLogitud());
-                buttonSuelo.setEnabled(true);
-                buttonNormal.setVisibility(View.INVISIBLE);
-                desactivarLocalizacion();
-
-            }
-        });*/
+       */
     }
 
 
@@ -123,23 +134,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
         configurarMapa(10.3898, -75.480);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mapa.setMyLocationEnabled(true);
         presentador.agregarUbicacionEstacion();
+
+    }
+    public void ira(){
+        Toast.makeText(MainActivity.this, "pulsado", Toast.LENGTH_SHORT).show();
+        LatLng l=getMarcador().getPosition();
+        Uri uri= Uri.parse("google.navigation:q="+l.latitude+","+l.longitude);
+        Intent i=new Intent(Intent.ACTION_VIEW,uri);
+        i.setPackage("com.google.android.apps.maps");
+        startActivity(i);
+    }
+    //investigar superpocision de permisoso
+    public Marker getMarcador() {
+        return marcador;
     }
 
-    //investigar superpocision de permisoso
-
+    public void setMarcador(Marker marcador) {
+        this.marcador = marcador;
+    }
     /* @Override
     public void superporicion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -148,15 +161,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(myIntent);
         }
     }
-
+*/
     @Override
     public boolean chequearPermiso() {
-        int estadoACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        int estadoSYSTEM_ALERT_WINDOW = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.SYSTEM_ALERT_WINDOW);
-        int estadoACCESS_COARSE_LOCATION = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED &&
-                estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED&&
-                estadoSYSTEM_ALERT_WINDOW == PackageManager.PERMISSION_GRANTED) {
+        int estadoACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int estadoACCESS_COARSE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED /*&&
+                estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED*/) {
             return true;
         }
         Toast.makeText(this, "Permiso Denegado", Toast.LENGTH_LONG).show();
@@ -167,33 +178,64 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void establecerPermiso() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION) &&
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
-
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             Toast.makeText(this, "Permiso otorgado, puedes cambiarlos en ajustes de aplicacion", Toast.LENGTH_LONG).show();
 
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.SYSTEM_ALERT_WINDOW},
-                    this.CODIGO_PERMISO_LOCALIZACION);
+                    Manifest.permission.ACCESS_COARSE_LOCATION},this.CODIGO_PERMISO_LOCALIZACION);
         }
-    }*/
+    }
+
+    @Override
+    public void miLocalizacion() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            establecerPermiso();
+            return;
+        }
+        mapa.setMyLocationEnabled(true);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case CODIGO_PERMISO_LOCALIZACION:
-                /*if (chequearPermiso()) {
+                if (chequearPermiso()) {
+                    presentador.agregarMiLocalizacion();
                     Toast.makeText(this, "Permiso de localizacion activo", Toast.LENGTH_LONG).show();
+
                 }else {
                     Toast.makeText(this, "No esta activo el permiso", Toast.LENGTH_SHORT).show();
-                }*/
+                    establecerPermiso();
+                }
                 break;
 
         }
     }
 
+    public boolean chekearInternet(){
+
+            try {
+                Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+
+                int val           = p.waitFor();
+                boolean reachable = (val == 0);
+                return reachable;
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return false;
+    }
     /*
     @Override
     public void getApiLocalizacion() {
@@ -234,6 +276,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 */
     @Override
     public void configurarMapa(double lat, double lon) {
+        mapa.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                buttonNormal.setVisibility(View.VISIBLE);
+                setMarcador(marker);
+                return false;
+            }
+
+        });
+        mapa.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                buttonNormal.setVisibility(View.INVISIBLE);
+            }
+        });
+        UiSettings u=mapa.getUiSettings();
+        u.setMapToolbarEnabled(false);
         mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(lat, lon))
@@ -243,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .build();
         CameraUpdate camara = CameraUpdateFactory.newCameraPosition(cameraPosition);
         mapa.animateCamera(camara);
+
     }
 /*
     @Override
