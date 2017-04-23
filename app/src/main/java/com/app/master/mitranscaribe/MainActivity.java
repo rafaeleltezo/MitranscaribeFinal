@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         //Agregarndo referencia de fragment al ActivityMAin
         presentador = new MainActivityPresentador(this, this);
-        presentador.establecerPermisos();
         presentador.establecerFragmentMapa();
+        presentador.establecerPermisos();
         presentador.chekerInternet();
 
 
