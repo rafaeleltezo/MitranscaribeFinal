@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Bus");
-        Toast.makeText(this, myRef.getKey().toString(), Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void establecerPermiso() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
                 ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
             Toast.makeText(this, "Permiso otorgado, puedes cambiarlos en ajustes de aplicacion", Toast.LENGTH_LONG).show();
 
         } else {

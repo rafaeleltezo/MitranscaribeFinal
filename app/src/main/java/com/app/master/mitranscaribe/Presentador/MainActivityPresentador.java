@@ -72,12 +72,8 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
 
     @Override
     public void agregarMiLocalizacion() {
-        if(iMainActivity.chequearPermiso()){
         iMainActivity.miLocalizacion();
-        }else {
-            Toast.makeText(context, "Acive permisos para continuar", Toast.LENGTH_SHORT).show();
-            iMainActivity.establecerPermiso();
-        }
+
     }
 
     /*
