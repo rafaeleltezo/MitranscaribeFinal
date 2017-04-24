@@ -7,12 +7,13 @@ import android.util.Log;
  */
 
 public class Bus {
-    private String nombre,estado,latitud,longitud;
+    private String nombre,estado;
+    private double latitud,longitud;
 
     public Bus() {
     }
 
-    public Bus(String nombre, String estado, String latitud, String longitud) {
+    public Bus(String nombre, double latitud, double longitud,String estado) {
         this.nombre = nombre;
         this.estado = estado;
         this.latitud = latitud;
@@ -35,19 +36,19 @@ public class Bus {
         this.estado = estado;
     }
 
-    public String getLatitud() {
+    public double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 }

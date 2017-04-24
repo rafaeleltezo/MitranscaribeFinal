@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.app.master.mitranscaribe.Modelo.Bus;
 import com.app.master.mitranscaribe.Modelo.Datos;
 import com.app.master.mitranscaribe.Modelo.Estaciones;
+import com.app.master.mitranscaribe.Modelo.FirebaseReferences;
 import com.app.master.mitranscaribe.R;
 import com.app.master.mitranscaribe.Vista.iMainActivity;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,6 +30,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -101,11 +107,30 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
             iMainActivity.addPosicionEstacion(estacion.getLatitud(),estacion.getLongitud(),estacion.getNombre());
 
         }
-        try {
-            //datos.getPosicionBus();
-        }catch (Exception e){
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+    }
+
+    @Override
+    public void agregarUbicacionBuses(){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(FirebaseReferences.referencia_Bus);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                iMainActivity.refrescarMapa();
+                for (DataSnapshot datos:dataSnapshot.getChildren()) {
+                    Bus bus=datos.getValue(Bus.class);
+                    Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
+                    iMainActivity.addPosicionEstacion(bus.getLatitud(),bus.getLongitud(),bus.getNombre());
+
+                }
+               //
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context,database.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

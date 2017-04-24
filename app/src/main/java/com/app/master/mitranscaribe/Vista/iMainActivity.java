@@ -16,6 +16,8 @@ public interface iMainActivity {
     public void establecerPermiso();
     public void miLocalizacion();
     public boolean chekearInternet();
+    public void refrescarMapa();
+    public void agregarUbicacionBuses();
     //public void getApiLocalizacion();
     //public void setLocalizacion(Location location);
     public void configurarMapa(double lat,double lon);

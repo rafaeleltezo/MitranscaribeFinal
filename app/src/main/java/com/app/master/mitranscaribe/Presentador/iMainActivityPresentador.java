@@ -18,6 +18,7 @@ public interface iMainActivityPresentador {
     public void chekerInternet();
     public void agregarMiLocalizacion();
     public void agregarUbicacionEstacion();
+    public void agregarUbicacionBuses();
 
 
 }

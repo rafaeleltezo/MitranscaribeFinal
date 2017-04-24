@@ -135,7 +135,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa = googleMap;
         configurarMapa(10.3898, -75.480);
         presentador.agregarUbicacionEstacion();
+        presentador.agregarUbicacionBuses();
 
+    }
+    @Override
+    public void refrescarMapa(){
+        mapa.clear();
     }
     public void ira(){
         Toast.makeText(MainActivity.this, "pulsado", Toast.LENGTH_SHORT).show();
@@ -238,6 +243,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             return false;
     }
+
+    @Override
+    public void agregarUbicacionBuses() {
+
+    }
+
     /*
     @Override
     public void getApiLocalizacion() {

@@ -35,6 +35,7 @@ public class Datos {
     }
 
 
+
     public List<Bus> getPosicionBus(){
         buses=new ArrayList<>();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -42,11 +43,9 @@ public class Datos {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(context,dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                 for (DataSnapshot datos:dataSnapshot.getChildren()) {
-
-                    Bus bus=datos.getValue(Bus.class);
-                   Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
+                   Bus bus=datos.getValue(Bus.class);
+                   //Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
                    buses.add(bus);
                 }
 
@@ -54,7 +53,7 @@ public class Datos {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(context,database.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         return buses;
