@@ -1,34 +1,22 @@
 package com.app.master.mitranscaribe.Modelo;
 
+import android.util.Log;
+
 /**
  * Created by Rafael p on 21/4/2017.
  */
 
 public class Bus {
-    private String id,nombre,placa;
-    double longitud,latitud;
+    private String nombre,estado,latitud,longitud;
 
-    public Bus(){
-        id="";
-        nombre="";
-        placa="";
-        longitud=0;
-        latitud=0;
+    public Bus() {
     }
-    public Bus(String id, String nombre, String placa, double longitud, double latitud) {
-        this.id = id;
+
+    public Bus(String nombre, String estado, String latitud, String longitud) {
         this.nombre = nombre;
-        this.placa = placa;
-        this.longitud = longitud;
+        this.estado = estado;
         this.latitud = latitud;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.longitud = longitud;
     }
 
     public String getNombre() {
@@ -39,27 +27,27 @@ public class Bus {
         this.nombre = nombre;
     }
 
-    public String getPlaca() {
-        return placa;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setPlaca(String placa) {
-        this.placa = placa;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
-    public double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(double longitud) {
-        this.longitud = longitud;
-    }
-
-    public double getLatitud() {
+    public String getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(double latitud) {
+    public void setLatitud(String latitud) {
         this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
     }
 }

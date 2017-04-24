@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.app.master.mitranscaribe.Modelo.Bus;
 import com.app.master.mitranscaribe.Modelo.Datos;
 import com.app.master.mitranscaribe.Modelo.Estaciones;
 import com.app.master.mitranscaribe.R;
@@ -40,6 +41,7 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
 
     private Context context;
     private iMainActivity iMainActivity;
+    private Datos datos;
 
 
     public MainActivityPresentador(iMainActivity iMainActivity, Context context) {
@@ -94,11 +96,17 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
     */
     @Override
     public void agregarUbicacionEstacion() {
-        Datos datos=new Datos();
+        datos=new Datos(context);
         for (Estaciones  estacion :datos.getPosicionEstaciones()) {
             iMainActivity.addPosicionEstacion(estacion.getLatitud(),estacion.getLongitud(),estacion.getNombre());
 
         }
+        try {
+            //datos.getPosicionBus();
+        }catch (Exception e){
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
+
 
 }

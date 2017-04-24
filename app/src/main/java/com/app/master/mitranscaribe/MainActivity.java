@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.app.master.mitranscaribe.Modelo.Bus;
+import com.app.master.mitranscaribe.Modelo.FirebaseReferences;
 import com.app.master.mitranscaribe.Presentador.MainActivityPresentador;
 import com.app.master.mitranscaribe.Presentador.iMainActivityPresentador;
 import com.app.master.mitranscaribe.Vista.iMainActivity;
@@ -96,10 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         presentador.establecerFragmentMapa();
         presentador.establecerPermisos();
         presentador.chekerInternet();
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Bus");
-
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
 
@@ -207,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
         mapa.setMyLocationEnabled(true);
+
     }
 
     @Override
