@@ -20,7 +20,7 @@ import java.util.List;
 public class Datos {
 
     private ArrayList<Estaciones>estaciones;
-    private ArrayList<Bus> buses;
+    private List<Bus> buses;
     private Context context;
     public Datos(Context context){
         this.context=context;
@@ -35,19 +35,19 @@ public class Datos {
     }
 
 
-    public ArrayList<Bus> getPosicionBus(){
+    public List<Bus> getPosicionBus(){
         buses=new ArrayList<>();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(FirebaseReferences.referencia_nombre);
+        DatabaseReference myRef = database.getReference(FirebaseReferences.referencia_Bus);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Toast.makeText(context,dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                 for (DataSnapshot datos:dataSnapshot.getChildren()) {
 
-                   // Bus bus=datos.getValue(Bus.class);
-                    //Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
-                    //buses.add(bus);
+                    Bus bus=datos.getValue(Bus.class);
+                   Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
+                   buses.add(bus);
                 }
 
             }

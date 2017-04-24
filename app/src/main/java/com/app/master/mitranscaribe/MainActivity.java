@@ -98,9 +98,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         presentador.establecerFragmentMapa();
         presentador.establecerPermisos();
         presentador.chekerInternet();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-
 
         buttonNormal = (FloatingActionButton) findViewById(R.id.botonNormal);
         buttonNormal.setVisibility(View.INVISIBLE);
