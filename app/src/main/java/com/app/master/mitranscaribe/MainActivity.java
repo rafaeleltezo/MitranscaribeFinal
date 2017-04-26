@@ -72,8 +72,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static final int CODIGO_PERMISO_LOCALIZACION = 1;
     private iMainActivityPresentador presentador;
     private FloatingActionButton buttonNormal;
-    private Marker marcador;
+    private Marker marcadorBus;
+    private Marker marcadorParadero;
 
+    public Marker getMarcadorBus() {
+        return marcadorBus;
+    }
+
+    public void setMarcadorBus(Marker marcadorBus) {
+        this.marcadorBus = marcadorBus;
+    }
+
+    public Marker getMarcadorParadero() {
+        return marcadorParadero;
+    }
+
+    public void setMarcadorParadero(Marker marcadorParadero) {
+        this.marcadorParadero = marcadorParadero;
+    }
     /*
     private Location localizacion;
     private GoogleApiClient apiClient;
@@ -86,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationRequest locRequest;
     private MarkerOptions marcadorMiPosicion;
     */
-
 
 
     @Override
@@ -134,30 +149,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
         configurarMapa(10.3898, -75.480);
-        presentador.agregarUbicacionEstacion();
+       // presentador.agregarUbicacionEstacion();
         presentador.agregarUbicacionBuses();
 
     }
-    @Override
-    public void refrescarMapa(){
-        mapa.clear();
-    }
-    public void ira(){
+
+    public void ira() {
         Toast.makeText(MainActivity.this, "pulsado", Toast.LENGTH_SHORT).show();
-        LatLng l=getMarcador().getPosition();
-        Uri uri= Uri.parse("google.navigation:q="+l.latitude+","+l.longitude);
-        Intent i=new Intent(Intent.ACTION_VIEW,uri);
+        LatLng l = getMarcadorParadero().getPosition();
+        Uri uri = Uri.parse("google.navigation:q=" + l.latitude + "," + l.longitude);
+        Intent i = new Intent(Intent.ACTION_VIEW, uri);
         i.setPackage("com.google.android.apps.maps");
         startActivity(i);
-    }
-    //investigar superpocision de permisoso
-    public Marker getMarcador() {
-        return marcador;
+
     }
 
-    public void setMarcador(Marker marcador) {
-        this.marcador = marcador;
-    }
+
     /* @Override
     public void superporicion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -190,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION},this.CODIGO_PERMISO_LOCALIZACION);
+                            Manifest.permission.ACCESS_COARSE_LOCATION}, this.CODIGO_PERMISO_LOCALIZACION);
         }
     }
 
@@ -219,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     presentador.agregarMiLocalizacion();
                     Toast.makeText(this, "Permiso de localizacion activo", Toast.LENGTH_LONG).show();
 
-                }else {
+                } else {
                     Toast.makeText(this, "No esta activo el permiso", Toast.LENGTH_SHORT).show();
                     establecerPermiso();
                 }
@@ -228,20 +235,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public boolean chekearInternet(){
+    public boolean chekearInternet() {
 
-            try {
-                Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+        try {
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
 
-                int val           = p.waitFor();
-                boolean reachable = (val == 0);
-                return reachable;
+            int val = p.waitFor();
+            boolean reachable = (val == 0);
+            return reachable;
 
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return false;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -292,9 +299,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                buttonNormal.setVisibility(View.VISIBLE);
-                setMarcador(marker);
-                return false;
+                if(marker.equals(getMarcadorBus())) {
+                    buttonNormal.setVisibility(View.VISIBLE);
+                    setMarcadorParadero(marker);
+                    return false;
+                }
+                return true;
+
             }
 
         });
@@ -304,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 buttonNormal.setVisibility(View.INVISIBLE);
             }
         });
-        UiSettings u=mapa.getUiSettings();
+        UiSettings u = mapa.getUiSettings();
         u.setMapToolbarEnabled(false);
         mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -317,32 +328,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.animateCamera(camara);
 
     }
-/*
-    @Override
-    public void verDesdeSuelo(double lat, double lon) {
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(lat, lon))
-                .zoom(19)
-                .bearing(45)
-                .tilt(90)
-                .build();
-        CameraUpdate camara = CameraUpdateFactory.newCameraPosition(cameraPosition);
-        mapa.animateCamera(camara);
-    }
 
-    @Override
-    public void verNormal(double lat, double lon) {
+    /*
+        @Override
+        public void verDesdeSuelo(double lat, double lon) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(lat, lon))
-                    .zoom(15)
-                    .bearing(0)
-                    .tilt(0)
+                    .zoom(19)
+                    .bearing(45)
+                    .tilt(90)
                     .build();
             CameraUpdate camara = CameraUpdateFactory.newCameraPosition(cameraPosition);
             mapa.animateCamera(camara);
+        }
 
-    }
-*/
+        @Override
+        public void verNormal(double lat, double lon) {
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(lat, lon))
+                        .zoom(15)
+                        .bearing(0)
+                        .tilt(0)
+                        .build();
+                CameraUpdate camara = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                mapa.animateCamera(camara);
+
+        }
+    */
     @Override
     public MapFragment EstablecerFragementMapa() {
         return (MapFragment) getFragmentManager()
@@ -354,83 +366,112 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         EstablecerFragementMapa().getMapAsync(this);
 
     }
-/*
-    @Override
-    public void actualizarLocalizacion() {
-        locRequest = new LocationRequest();
-        locRequest.setInterval(2000);
-        locRequest.setFastestInterval(1000);
-        locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        LocationSettingsRequest locSettingsRequest =
-                new LocationSettingsRequest.Builder()
-                        .addLocationRequest(locRequest)
-                        .build();
 
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(
-                        apiClient, locSettingsRequest);
+    /*
+        @Override
+        public void actualizarLocalizacion() {
+            locRequest = new LocationRequest();
+            locRequest.setInterval(2000);
+            locRequest.setFastestInterval(1000);
+            locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult locationSettingsResult) {
-                final Status status = locationSettingsResult.getStatus();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        startLocationUpdates();
-                        break;
+            LocationSettingsRequest locSettingsRequest =
+                    new LocationSettingsRequest.Builder()
+                            .addLocationRequest(locRequest)
+                            .build();
 
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            Toast.makeText(getBaseContext(),
-                                    "Se Requiere Configuracion Adicional",Toast.LENGTH_LONG).show();
-                            status.startResolutionForResult(MainActivity.this, PETICION_CONFIG_UBICACION);
+            PendingResult<LocationSettingsResult> result =
+                    LocationServices.SettingsApi.checkLocationSettings(
+                            apiClient, locSettingsRequest);
 
-                        } catch (IntentSender.SendIntentException e) {
-                            Toast.makeText(getBaseContext(),
-                                    "Error al intentar solucionar configuración de ubicación",
+            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(LocationSettingsResult locationSettingsResult) {
+                    final Status status = locationSettingsResult.getStatus();
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            startLocationUpdates();
+                            break;
+
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            try {
+                                Toast.makeText(getBaseContext(),
+                                        "Se Requiere Configuracion Adicional",Toast.LENGTH_LONG).show();
+                                status.startResolutionForResult(MainActivity.this, PETICION_CONFIG_UBICACION);
+
+                            } catch (IntentSender.SendIntentException e) {
+                                Toast.makeText(getBaseContext(),
+                                        "Error al intentar solucionar configuración de ubicación",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            Toast.makeText(getBaseContext(), "El dispositivo no cuenta con lo requerido",
                                     Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Toast.makeText(getBaseContext(), "El dispositivo no cuenta con lo requerido",
-                                Toast.LENGTH_SHORT).show();
-                        break;
+                            break;
+                    }
                 }
+        });
+        }
+
+        @Override
+        public void startLocationUpdates() {
+            int estadoACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            int estadoACCESS_COARSE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+            int estadoSYSTEM_ALERT_WINDOW = ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW);
+            if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED &&
+                    estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED &&
+                    estadoSYSTEM_ALERT_WINDOW ==PackageManager.PERMISSION_GRANTED) {
+
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        apiClient, locRequest, MainActivity.this);
+
+            }else {
+                establecerPermiso();
             }
-    });
+
+        }
+
+        @Override
+        public void desactivarLocalizacion() {
+             LocationServices.FusedLocationApi.removeLocationUpdates(
+                        apiClient, this);
+        }
+    */
+    @Override
+    public void addPosicionEstacion(double latitud, double longitud, String titulo) {
+
+        Marker marker=mapa.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title(titulo));
+        setMarcadorParadero(marker);
+        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estacion));
+
     }
 
     @Override
-    public void startLocationUpdates() {
-        int estadoACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int estadoACCESS_COARSE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        int estadoSYSTEM_ALERT_WINDOW = ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW);
-        if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED &&
-                estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED &&
-                estadoSYSTEM_ALERT_WINDOW ==PackageManager.PERMISSION_GRANTED) {
-
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    apiClient, locRequest, MainActivity.this);
-
-        }else {
-            establecerPermiso();
+    public void refrescarMarcadorParaderos() {
+        if(getMarcadorParadero()!=null){
+            getMarcadorParadero().remove();
         }
 
     }
 
     @Override
-    public void desactivarLocalizacion() {
-         LocationServices.FusedLocationApi.removeLocationUpdates(
-                    apiClient, this);
+    public void addPosicionBus(double latitud, double longitud, String titulo, String estado) {
+        Marker marker=mapa.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title(titulo));
+        setMarcadorBus(marker);
+        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.bus));
+
     }
-*/
+
     @Override
-    public void addPosicionEstacion(double latitud, double longitud,String tituloEstacion) {
-        mapa.addMarker(new MarkerOptions().position(new LatLng(latitud,longitud)).title(tituloEstacion))
-                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estacion));
+    public void refrescarMarcadorBus() {
+       if(getMarcadorBus()!=null){
+           getMarcadorBus().remove();
+       }
     }
+
 /*
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -494,4 +535,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, "Aplicacion pausada", Toast.LENGTH_SHORT).show();
         desactivarLocalizacion();
     }*/
+
 }

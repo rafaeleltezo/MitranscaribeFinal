@@ -16,7 +16,7 @@ public interface iMainActivity {
     public void establecerPermiso();
     public void miLocalizacion();
     public boolean chekearInternet();
-    public void refrescarMapa();
+    //public void refrescarMapa();
     public void agregarUbicacionBuses();
     //public void getApiLocalizacion();
     //public void setLocalizacion(Location location);
@@ -28,7 +28,10 @@ public interface iMainActivity {
     //public void actualizarLocalizacion();
     //public void startLocationUpdates();
     //public void desactivarLocalizacion();
-    public void addPosicionEstacion(double latitud,double longitud,String tituloEstacion);
+    public void addPosicionBus(double latitud, double longitud, String titulo,String estado);
+    public void refrescarMarcadorBus();
+    public void addPosicionEstacion(double latitud,double longitud,String titulo);
+    public void refrescarMarcadorParaderos();
 
 }
 

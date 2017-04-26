@@ -6,4 +6,5 @@ package com.app.master.mitranscaribe.Modelo;
 
 public class FirebaseReferences {
     public static final String referencia_Bus="Bus";
+    public static final String referencia_Paradero="Paradero";
 }

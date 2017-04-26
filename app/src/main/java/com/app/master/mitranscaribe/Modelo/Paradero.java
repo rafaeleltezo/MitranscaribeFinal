@@ -6,33 +6,22 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by Rafael p on 15/4/2017.
  */
 
-public class Estaciones {
-    String id;
+public class Paradero {
     double latitud;
     double longitud;
     String tituloEstacion;
 
-    public Estaciones(){
-        id="";
+    public Paradero(){
         latitud=0;
         longitud=0;
         tituloEstacion="";
 
     }
 
-    public Estaciones(String id, double latitud, double longitud, String nombre) {
-        this.id = id;
+    public Paradero(double latitud, double longitud, String nombre) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.tituloEstacion = nombre;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public double getLatitud() {
