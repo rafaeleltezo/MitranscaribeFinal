@@ -61,6 +61,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 import static com.app.master.mitranscaribe.R.id.btnActualizar;
 import static com.app.master.mitranscaribe.R.id.design_menu_item_action_area;
@@ -74,22 +75,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FloatingActionButton buttonNormal;
     private Marker marcadorBus;
     private Marker marcadorParadero;
+    Marker marcador;
+    private ArrayList<Marker> marcadoresBus;
+    private ArrayList<Marker> marcadoresParadero;
 
-    public Marker getMarcadorBus() {
-        return marcadorBus;
-    }
-
-    public void setMarcadorBus(Marker marcadorBus) {
-        this.marcadorBus = marcadorBus;
-    }
-
-    public Marker getMarcadorParadero() {
-        return marcadorParadero;
-    }
-
-    public void setMarcadorParadero(Marker marcadorParadero) {
-        this.marcadorParadero = marcadorParadero;
-    }
     /*
     private Location localizacion;
     private GoogleApiClient apiClient;
@@ -110,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         //Agregarndo referencia de fragment al ActivityMAin
         presentador = new MainActivityPresentador(this, this);
+        marcadoresBus=new ArrayList<>();
+        marcadoresParadero =new ArrayList<>();
         presentador.establecerFragmentMapa();
         presentador.establecerPermisos();
         presentador.chekerInternet();
@@ -148,11 +139,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
-        configurarMapa(10.3898, -75.480);
-       // presentador.agregarUbicacionEstacion();
+        configurarMapa(10.4027901, -75.5156382);
+        presentador.agregarUbicacionEstacion();
         presentador.agregarUbicacionBuses();
 
     }
+
+    public Marker getMarcadorBus() {
+        return marcadorBus;
+    }
+
+    public void setMarcadorBus(Marker marcadorBus) {
+        marcadoresBus.add(marcadorBus);
+        this.marcadorBus = marcadorBus;
+    }
+
+    public Marker getMarcadorParadero() {
+        return marcadorParadero;
+    }
+
+    public void setMarcadorParadero(Marker marcadorParadero) {
+        marcadoresParadero.add(marcadorParadero);
+        this.marcadorParadero = marcadorParadero;
+    }
+
 
     public void ira() {
         Toast.makeText(MainActivity.this, "pulsado", Toast.LENGTH_SHORT).show();
@@ -299,12 +309,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if(marker.equals(getMarcadorBus())) {
                     buttonNormal.setVisibility(View.VISIBLE);
                     setMarcadorParadero(marker);
                     return false;
-                }
-                return true;
+
+
 
             }
 
@@ -320,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(lat, lon))
-                .zoom(10)
+                .zoom(13)
                 .bearing(0)
                 .tilt(0)
                 .build();
@@ -447,12 +456,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setMarcadorParadero(marker);
         marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estacion));
 
+
     }
 
     @Override
     public void refrescarMarcadorParaderos() {
-        if(getMarcadorParadero()!=null){
-            getMarcadorParadero().remove();
+        if(marcadoresParadero.size()>0){
+            for (Marker marcador:marcadoresParadero) {
+                marcador.remove();
+            }
+            marcadoresParadero.clear();
         }
 
     }
@@ -461,15 +474,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void addPosicionBus(double latitud, double longitud, String titulo, String estado) {
         Marker marker=mapa.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title(titulo));
         setMarcadorBus(marker);
+        Toast.makeText(this,marker.getId(), Toast.LENGTH_SHORT).show();
         marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.bus));
 
     }
 
     @Override
     public void refrescarMarcadorBus() {
-       if(getMarcadorBus()!=null){
-           getMarcadorBus().remove();
-       }
+       if(marcadoresBus.size()>0){
+            for (Marker marcador:marcadoresBus) {
+                marcador.remove();
+            }
+            marcadoresBus.clear();
+        }
     }
 
 /*

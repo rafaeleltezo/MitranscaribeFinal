@@ -86,9 +86,10 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 iMainActivity.refrescarMarcadorParaderos();
                 for (DataSnapshot datos:dataSnapshot.getChildren()) {
-                    Paradero bus=datos.getValue(Paradero.class);
-                    Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
-                    iMainActivity.addPosicionEstacion(bus.getLatitud(),bus.getLongitud(),bus.getNombre());
+                    Paradero paradero=datos.getValue(Paradero.class);
+                    Toast.makeText(context,paradero.getNombre(), Toast.LENGTH_SHORT).show();
+                    iMainActivity.addPosicionEstacion(paradero.getLatitud(),paradero.getLongitud(),
+                            paradero.getNombre());
 
                 }
             }
@@ -106,7 +107,7 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                    iMainActivity.refrescarMarcadorBus();
+                   iMainActivity.refrescarMarcadorBus();
                 for (DataSnapshot datos:dataSnapshot.getChildren()) {
                     Bus bus=datos.getValue(Bus.class);
                     Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();

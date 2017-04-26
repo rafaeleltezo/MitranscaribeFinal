@@ -7,21 +7,24 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public class Paradero {
-    double latitud;
-    double longitud;
-    String tituloEstacion;
+    private String nombre;
+    private double latitud,longitud;
 
-    public Paradero(){
-        latitud=0;
-        longitud=0;
-        tituloEstacion="";
-
+    public Paradero() {
     }
 
-    public Paradero(double latitud, double longitud, String nombre) {
+    public Paradero(String nombre, double latitud, double longitud) {
+        this.nombre = nombre;
         this.latitud = latitud;
         this.longitud = longitud;
-        this.tituloEstacion = nombre;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public double getLatitud() {
@@ -37,14 +40,6 @@ public class Paradero {
     }
 
     public void setLongitud(double longitud) {
-        longitud = longitud;
-    }
-
-    public String getNombre() {
-        return tituloEstacion;
-    }
-
-    public void setNombre(String nombre) {
-        this.tituloEstacion = nombre;
+        this.longitud = longitud;
     }
 }
