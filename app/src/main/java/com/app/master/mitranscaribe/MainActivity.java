@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker marcador;
     private ArrayList<Marker> marcadoresBus;
     private ArrayList<Marker> marcadoresParadero;
+    //private GoogleApiClient apiClient;
 
     /*
     private Location localizacion;
-    private GoogleApiClient apiClient;
     public static final int PETICION_CONFIG_UBICACION = 2;
     private FloatingActionButton buttonSuelo;
 
@@ -188,8 +188,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean chequearPermiso() {
         int estadoACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int estadoACCESS_COARSE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED /*&&
-                estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED*/) {
+        if (estadoACCESS_FINE_LOCATION == PackageManager.PERMISSION_GRANTED &&
+                estadoACCESS_COARSE_LOCATION == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
         Toast.makeText(this, "Permiso Denegado", Toast.LENGTH_LONG).show();
@@ -267,43 +267,43 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /*
-    @Override
-    public void getApiLocalizacion() {
-        apiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    @Override
-    public void setLocalizacion(Location location) {
-        this.localizacion=location;
-        if (location != null) {
-            setLogitud(location.getLongitude());
-            setLatitud(location.getLatitude());
-            Toast.makeText(this, "Latitud= "+location.getLatitude()+" Longitud= "+location.getLongitude(), Toast.LENGTH_SHORT).show();
-        } else {
-            Snackbar.make(lPrincipal, "Ubicacion Desconocida", Snackbar.LENGTH_LONG).show();
+        @Override
+        public void getApiLocalizacion() {
+            apiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, this)
+                    .addConnectionCallbacks(this)
+                    .addApi(LocationServices.API)
+                    .build();
         }
-    }
 
-    public double getLatitud() {
-        return latitud;
-    }
+            @Override
+            public void setLocalizacion(Location location) {
+                this.localizacion=location;
+                if (location != null) {
+                    setLogitud(location.getLongitude());
+                    setLatitud(location.getLatitude());
+                    Toast.makeText(this, "Latitud= "+location.getLatitude()+" Longitud= "+location.getLongitude(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(lPrincipal, "Ubicacion Desconocida", Snackbar.LENGTH_LONG).show();
+                }
+            }
 
-    public void setLatitud(double latitud) {
-        this.latitud = latitud;
-    }
+            public double getLatitud() {
+                return latitud;
+            }
 
-    public double getLogitud() {
-        return logitud;
-    }
+            public void setLatitud(double latitud) {
+                this.latitud = latitud;
+            }
 
-    public void setLogitud(double logitud) {
-        this.logitud = logitud;
-    }
-*/
+            public double getLogitud() {
+                return logitud;
+            }
+
+            public void setLogitud(double logitud) {
+                this.logitud = logitud;
+            }
+        */
     @Override
     public void configurarMapa(double lat, double lon) {
         mapa.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -492,8 +492,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 /*
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Snackbar.make(lPrincipal, "Error Grave al conectar los Servicios de Google Play", Snackbar.LENGTH_LONG).show();
+        Toast.makeText(this, "Error Grave al conectar los Servicios de Google Play", Toast.LENGTH_LONG).show();
     }
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -505,13 +506,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         Location lastLocation =
                 LocationServices.FusedLocationApi.getLastLocation(apiClient);
-        Toast.makeText(this, lastLocation.toString()+" entre", Toast.LENGTH_SHORT).show();
-        setLocalizacion(lastLocation);
+        Toast.makeText(this, lastLocation.toString()+"latitud: "+lastLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+
+        //setLocalizacion(lastLocation);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Snackbar.make(lPrincipal, "Se ha interrumpido la conexión con Google Play Services", Snackbar.LENGTH_LONG).show();
+        Toast.makeText(this, "Se ha interrumpido la conexión con Google Play Services", Toast.LENGTH_LONG).show();
     }
 
     @Override

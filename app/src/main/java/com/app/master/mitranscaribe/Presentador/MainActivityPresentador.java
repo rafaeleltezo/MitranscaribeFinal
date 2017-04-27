@@ -62,21 +62,22 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
     }
 
     /*
-        @Override
-        public void establecerGooglePlay() {
-            iMainActivity.getApiLocalizacion();
-        }
-        @Override
-        public void actualizarUbicacion() {
-            iMainActivity.actualizarLocalizacion();
-        }
+           @Override
+           public void establecerGooglePlay() {
+               iMainActivity.getApiLocalizacion();
+           }
 
-        @Override
-        public void superposicion() {
-            iMainActivity.superporicion();
-        }
+      @Override
+      public void actualizarUbicacion() {
+          iMainActivity.actualizarLocalizacion();
+      }
 
-    */
+      @Override
+      public void superposicion() {
+          iMainActivity.superporicion();
+      }
+
+   */
     @Override
     public void agregarUbicacionEstacion() {
         database = FirebaseDatabase.getInstance();
