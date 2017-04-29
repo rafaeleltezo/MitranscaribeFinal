@@ -61,17 +61,17 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
 
     }
 
-    /*
-           @Override
-           public void establecerGooglePlay() {
-               iMainActivity.getApiLocalizacion();
+
+    @Override
+    public void establecerGooglePlay() {
+        iMainActivity.getApiLocalizacion();
            }
 
       @Override
       public void actualizarUbicacion() {
           iMainActivity.actualizarLocalizacion();
       }
-
+/*
       @Override
       public void superposicion() {
           iMainActivity.superporicion();
@@ -111,7 +111,7 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
                    iMainActivity.refrescarMarcadorBus();
                 for (DataSnapshot datos:dataSnapshot.getChildren()) {
                     Bus bus=datos.getValue(Bus.class);
-                    Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
                     iMainActivity.addPosicionBus(bus.getLatitud(),bus.getLongitud(),bus.getNombre(),bus.getEstado());
 
                 }

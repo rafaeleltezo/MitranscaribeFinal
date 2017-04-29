@@ -11,9 +11,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 public interface iMainActivityPresentador {
     public void establecerFragmentMapa();
-    //public void establecerGooglePlay();
+    public void establecerGooglePlay();
     public void establecerPermisos();
-    //public void actualizarUbicacion();
+    public void actualizarUbicacion();
     //public void superposicion();
     public void chekerInternet();
     public void agregarMiLocalizacion();
