@@ -398,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             locRequest.setInterval(20000);
             locRequest.setFastestInterval(10000);
             locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            startLocationUpdates();
+//           startLocationUpdates();
             LocationSettingsRequest locSettingsRequest =
                     new LocationSettingsRequest.Builder()
                             .addLocationRequest(locRequest)
@@ -415,6 +415,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     switch (status.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
                             startLocationUpdates();
+                            presentador.agregarMiLocalizacion();
                             break;
 
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -447,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             //Log.i(LOGTAG, "Inicio de recepción de ubicaciones");
 
             LocationServices.FusedLocationApi.requestLocationUpdates(apiClient, locRequest,MainActivity.this);
-                 presentador.agregarMiLocalizacion();
+
         }
         else {
                  establecerPermiso();
