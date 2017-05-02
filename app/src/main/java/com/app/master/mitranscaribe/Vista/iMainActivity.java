@@ -15,6 +15,7 @@ public interface iMainActivity {
     public boolean chequearPermiso();
     public void establecerPermiso();
     public void miLocalizacion();
+    public void marcarLimites();
     public boolean chekearInternet();
     //public void refrescarMapa();
     public void agregarUbicacionBuses();

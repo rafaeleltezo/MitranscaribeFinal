@@ -53,6 +53,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.FirebaseException;
@@ -107,11 +108,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         presentador = new MainActivityPresentador(this, this);
         marcadoresBus=new ArrayList<>();
         marcadoresParadero =new ArrayList<>();
+        presentador.establecerFragmentMapa();
         presentador.establecerPermisos();
-
+        Toast.makeText(this, "Estoy aqui", Toast.LENGTH_SHORT).show();
         presentador.chekerInternet();
-        presentador.establecerGooglePlay();
-        presentador.actualizarUbicacion();
+
 
         //Agregarndo Publicidad
         adView=(AdView)findViewById(R.id.adView);
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
                 ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
-            Toast.makeText(this, "Permiso otorgado, puedes cambiarlos en ajustes de aplicacion", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Permiso No otorgado, puedes cambiarlos en ajustes de aplicacion", Toast.LENGTH_LONG).show();
 
         } else {
             ActivityCompat.requestPermissions(this,
@@ -243,16 +244,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    public void marcarLimites() {
+        LatLngBounds Cartagena = new LatLngBounds(
+                //10.4027901, -75.5156382
+                new LatLng(10.3027, -75.6156), new LatLng(10.5627, -75.3156));
+// Constrain the camera target to the Adelaide bounds.
+        mapa.setLatLngBoundsForCameraTarget(Cartagena);
+
+
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case CODIGO_PERMISO_LOCALIZACION:
                 if (chequearPermiso()) {
-                    presentador.establecerFragmentMapa();
+
+                    presentador.establecerGooglePlay();
+                    presentador.actualizarUbicacion();
+                    presentador.limitesMapa();
                     Toast.makeText(this, "Permiso de localizacion activo", Toast.LENGTH_LONG).show();
 
                 } else {
                     Toast.makeText(this, "No esta activo el permiso", Toast.LENGTH_SHORT).show();
-                    establecerPermiso();
+                    presentador.establecerPermisos();
                 }
                 break;
 
@@ -340,6 +355,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
         UiSettings u = mapa.getUiSettings();
         u.setMapToolbarEnabled(false);
+
+
         mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(lat, lon))
@@ -349,6 +366,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .build();
         CameraUpdate camara = CameraUpdateFactory.newCameraPosition(cameraPosition);
         mapa.animateCamera(camara);
+
+        mapa.setMinZoomPreference(11f);
 
     }
 

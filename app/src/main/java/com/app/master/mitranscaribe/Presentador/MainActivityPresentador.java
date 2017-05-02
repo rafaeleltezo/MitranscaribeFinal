@@ -40,6 +40,11 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
 
     }
 
+    @Override
+    public void limitesMapa() {
+        iMainActivity.marcarLimites();
+    }
+
 
     @Override
     public void establecerPermisos() {
