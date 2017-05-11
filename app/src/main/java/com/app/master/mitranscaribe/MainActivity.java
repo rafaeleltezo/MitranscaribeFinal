@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
 
         toolbar=(Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         presentador = new MainActivityPresentador(this, this);
         marcadoresBus=new ArrayList<>();
