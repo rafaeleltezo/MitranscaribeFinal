@@ -512,7 +512,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setMarcadorBus(marker);
 
         //Toast.makeText(this,marker.getId(), Toast.LENGTH_SHORT).show();
-        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.bus));
+        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.gpsbus));
 
     }
 
