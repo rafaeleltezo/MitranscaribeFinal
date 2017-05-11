@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="botonFlotante">12dp</dimen>
+    <dimen name="navbar">4dp</dimen>
 
 </resources>

@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static final int PETICION_CONFIG_UBICACION = 2;
     private AdRequest adRequest;
     private AdView adView;
+    private Toolbar toolbar;
 
     /*
     private Location localizacion;
@@ -105,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         presentador = new MainActivityPresentador(this, this);
         marcadoresBus=new ArrayList<>();
         marcadoresParadero =new ArrayList<>();
@@ -259,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         switch (requestCode) {
             case CODIGO_PERMISO_LOCALIZACION:
                 if (chequearPermiso()) {
-
                     presentador.establecerGooglePlay();
                     presentador.actualizarUbicacion();
                     presentador.limitesMapa();
@@ -360,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(lat, lon))
-                .zoom(13)
+                .zoom(14)
                 .bearing(0)
                 .tilt(0)
                 .build();
@@ -368,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.animateCamera(camara);
 
         mapa.setMinZoomPreference(11f);
+        mapa.setMaxZoomPreference(18f);
 
     }
 
@@ -505,6 +509,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void addPosicionBus(double latitud, double longitud, String titulo, String estado) {
         Marker marker=mapa.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title(titulo));
         setMarcadorBus(marker);
+
         //Toast.makeText(this,marker.getId(), Toast.LENGTH_SHORT).show();
         marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.bus));
 
@@ -539,6 +544,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LocationServices.FusedLocationApi.getLastLocation(apiClient);
 
 
+        configurarMapa(lastLocation.getLatitude(),lastLocation.getLongitude());
         //setLocalizacion(lastLocation);
     }
 
