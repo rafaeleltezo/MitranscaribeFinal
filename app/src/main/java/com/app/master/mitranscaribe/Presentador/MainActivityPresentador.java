@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -192,7 +193,8 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
     @Override
     public void obtenerRutaGoogleMaps(double latitudOrigen,double longitudOrigen,double latitudDestino,double longitudDestino) {
         AdaptadorEnpointGoogle adaptador=new AdaptadorEnpointGoogle();
-        EnpointApiGoogleMaps enpoint=adaptador.establecerConexionGoogleMaps();
+        Gson gson=adaptador.construyeJsonDeserializador();
+        EnpointApiGoogleMaps enpoint=adaptador.establecerConexionGoogleMaps(gson);
         Call<RespuestaCoordenadas> coordenadas=enpoint.getUbicacion(String.valueOf(latitudOrigen),
                 String.valueOf(longitudOrigen),String.valueOf(latitudDestino),String.valueOf(longitudDestino));
         coordenadas.enqueue(new Callback<RespuestaCoordenadas>() {
@@ -200,6 +202,7 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
             public void onResponse(Call<RespuestaCoordenadas> call, Response<RespuestaCoordenadas> response) {
                 RespuestaCoordenadas respuesta=response.body();
                 coordenadasMapa=respuesta.getCoordenadas();
+                Toast.makeText(context,String.valueOf(coordenadasMapa.get(0).getDistancia()), Toast.LENGTH_SHORT).show();
             }
 
             @Override
