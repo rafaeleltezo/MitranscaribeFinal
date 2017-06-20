@@ -8,6 +8,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.app.master.mitranscaribe.Modelo.Bus;
+import com.app.master.mitranscaribe.Modelo.Coordenadas;
 import com.app.master.mitranscaribe.Modelo.FirebaseReferences;
 import com.app.master.mitranscaribe.Presentador.MainActivityPresentador;
 import com.app.master.mitranscaribe.Presentador.iMainActivityPresentador;
@@ -57,7 +59,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -107,30 +111,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar=(Toolbar)findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+//        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        //       toolbar.setTitle("");
+        //setSupportActionBar(toolbar);
         presentador = new MainActivityPresentador(this, this);
-        marcadoresBus=new ArrayList<>();
-        marcadoresParadero =new ArrayList<>();
+        marcadoresBus = new ArrayList<>();
+        marcadoresParadero = new ArrayList<>();
         presentador.establecerFragmentMapa();
         presentador.establecerPermisos();
         Toast.makeText(this, "Estoy aqui", Toast.LENGTH_SHORT).show();
         presentador.chekerInternet();
 
 
+
         //Agregarndo Publicidad
-        adView=(AdView)findViewById(R.id.adView);
-        adRequest=new AdRequest.Builder().build();
+        adView = (AdView) findViewById(R.id.adView);
+        adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
         //fin publicidad
-
+        presentador.agregarUbicacionBuses();
         buttonNormal = (FloatingActionButton) findViewById(R.id.botonNormal);
         buttonNormal.setVisibility(View.INVISIBLE);
         buttonNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ira();
+                presentador.obtenerRutaGoogleMaps(10.384199,-75.4583,10.3944652,-75.408415);
+                ira(presentador.obteberCoordenadas());
             }
         });
 
@@ -160,8 +166,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
         configurarMapa(10.4027901, -75.5156382);
-        presentador.agregarUbicacionEstacion();
-        presentador.agregarUbicacionBuses();
+        if (chequearPermiso()) {
+            presentador.agregarUbicacionEstacion();
+            presentador.agregarUbicacionBuses();
+            presentador.establecerGooglePlay();
+            presentador.actualizarUbicacion();
+            presentador.limitesMapa();
+        }
 
     }
 
@@ -184,13 +195,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    public void ira() {
-        Toast.makeText(MainActivity.this, "pulsado", Toast.LENGTH_SHORT).show();
-        LatLng l = getMarcadorParadero().getPosition();
-        Uri uri = Uri.parse("google.navigation:q=" + l.latitude + "," + l.longitude);
-        Intent i = new Intent(Intent.ACTION_VIEW, uri);
-        i.setPackage("com.google.android.apps.maps");
-        startActivity(i);
+    public void ira(ArrayList<Coordenadas> coordenadas) {
+        PolylineOptions linea = new PolylineOptions();
+        for (Coordenadas coordenada:coordenadas) {
+            linea.add(new LatLng(coordenada.getLatitud(), coordenada.getLongitud()));
+        }
+        mapa.addPolyline(linea);
 
     }
 
@@ -219,6 +229,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void establecerPermiso() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        CODIGO_PERMISO_LOCALIZACION);
+
+            }
+        }
+        /*
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
                 ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
@@ -228,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION}, this.CODIGO_PERMISO_LOCALIZACION);
-        }
+        }*/
     }
 
     @Override
@@ -263,7 +289,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case CODIGO_PERMISO_LOCALIZACION:
-                if (chequearPermiso()) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    presentador.agregarUbicacionEstacion();
+                    presentador.agregarUbicacionBuses();
                     presentador.establecerGooglePlay();
                     presentador.actualizarUbicacion();
                     presentador.limitesMapa();
@@ -300,14 +328,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-        @Override
-        public void getApiLocalizacion() {
-            apiClient = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this, this)
-                    .addConnectionCallbacks(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+    @Override
+    public void getApiLocalizacion() {
+        apiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
     /*
                 @Override
                 public void setLocalizacion(Location location) {
@@ -342,10 +371,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                    buttonNormal.setVisibility(View.VISIBLE);
-                    setMarcadorParadero(marker);
-                    return false;
-
+                buttonNormal.setVisibility(View.VISIBLE);
+                setMarcadorParadero(marker);
+                return false;
 
 
             }
@@ -415,55 +443,54 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
-        @Override
-        public void actualizarLocalizacion() {
-            locRequest = new LocationRequest();
-            locRequest.setInterval(20000);
-            locRequest.setFastestInterval(10000);
-            locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    @Override
+    public void actualizarLocalizacion() {
+        locRequest = new LocationRequest();
+        locRequest.setInterval(20000);
+        locRequest.setFastestInterval(10000);
+        locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 //           startLocationUpdates();
-            LocationSettingsRequest locSettingsRequest =
-                    new LocationSettingsRequest.Builder()
-                            .addLocationRequest(locRequest)
-                            .build();
+        LocationSettingsRequest locSettingsRequest =
+                new LocationSettingsRequest.Builder()
+                        .addLocationRequest(locRequest)
+                        .build();
 
-            PendingResult<LocationSettingsResult> result =
-                    LocationServices.SettingsApi.checkLocationSettings(
-                            apiClient, locSettingsRequest);
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(
+                        apiClient, locSettingsRequest);
 
-            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                @Override
-                public void onResult(LocationSettingsResult locationSettingsResult) {
-                    final Status status = locationSettingsResult.getStatus();
-                    switch (status.getStatusCode()) {
-                        case LocationSettingsStatusCodes.SUCCESS:
-                            startLocationUpdates();
-                            presentador.agregarMiLocalizacion();
-                            break;
-
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            try {
-                                // Log.i(LOGTAG, "Se requiere actuación del usuario");
-                                status.startResolutionForResult(MainActivity.this, PETICION_CONFIG_UBICACION);
-                            } catch (IntentSender.SendIntentException e) {
-                                //btnActualizar.setChecked(false);
-                                //Log.i(LOGTAG, "Error al intentar solucionar configuración de ubicación");
-                            }
-                            break;
-
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            //Log.i(LOGTAG, "No se puede cumplir la configuración de ubicación necesaria");
-                            // btnActualizar.setChecked(false);
-                            break;
-                    }
-                }
-        });
-        }
-
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
             @Override
-             public void startLocationUpdates() {
-             if (ActivityCompat.checkSelfPermission(MainActivity.this,
+            public void onResult(LocationSettingsResult locationSettingsResult) {
+                final Status status = locationSettingsResult.getStatus();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        startLocationUpdates();
+                        presentador.agregarMiLocalizacion();
+                        break;
+
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        try {
+                            // Log.i(LOGTAG, "Se requiere actuación del usuario");
+                            status.startResolutionForResult(MainActivity.this, PETICION_CONFIG_UBICACION);
+                        } catch (IntentSender.SendIntentException e) {
+                            //btnActualizar.setChecked(false);
+                            //Log.i(LOGTAG, "Error al intentar solucionar configuración de ubicación");
+                        }
+                        break;
+
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        //Log.i(LOGTAG, "No se puede cumplir la configuración de ubicación necesaria");
+                        // btnActualizar.setChecked(false);
+                        break;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             //Ojo: estamos suponiendo que ya tenemos concedido el permiso.
@@ -471,24 +498,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             //Log.i(LOGTAG, "Inicio de recepción de ubicaciones");
 
-            LocationServices.FusedLocationApi.requestLocationUpdates(apiClient, locRequest,MainActivity.this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(apiClient, locRequest, MainActivity.this);
 
+        } else {
+            establecerPermiso();
         }
-        else {
-                 establecerPermiso();
-             }
     }
 
     @Override
     public void desactivarLocalizacion() {
-       LocationServices.FusedLocationApi.removeLocationUpdates(
-                                apiClient, this);
-                }
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                apiClient, this);
+    }
 
     @Override
     public void addPosicionEstacion(double latitud, double longitud, String titulo) {
 
-        Marker marker=mapa.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title(titulo));
+        Marker marker = mapa.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title(titulo));
         setMarcadorParadero(marker);
         marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estacion));
 
@@ -497,8 +523,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void refrescarMarcadorParaderos() {
-        if(marcadoresParadero.size()>0){
-            for (Marker marcador:marcadoresParadero) {
+        if (marcadoresParadero.size() > 0) {
+            for (Marker marcador : marcadoresParadero) {
                 marcador.remove();
             }
             marcadoresParadero.clear();
@@ -507,19 +533,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void addPosicionBus(double latitud, double longitud, String titulo, String estado) {
-        Marker marker=mapa.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title(titulo));
-        setMarcadorBus(marker);
+    public void addPosicionBus(double latitud, double longitud, String titulo, String estado, String idMarcador) {
 
-        //Toast.makeText(this,marker.getId(), Toast.LENGTH_SHORT).show();
+        Marker marker = mapa.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title(titulo));
+        marker.setTag(idMarcador);
+        setMarcadorBus(marker);
         marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.gpsbus));
+
 
     }
 
     @Override
     public void refrescarMarcadorBus() {
-       if(marcadoresBus.size()>0){
-            for (Marker marcador:marcadoresBus) {
+        if (marcadoresBus.size() > 0) {
+            for (Marker marcador : marcadoresBus) {
                 marcador.remove();
             }
             marcadoresBus.clear();
@@ -545,7 +572,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LocationServices.FusedLocationApi.getLastLocation(apiClient);
 
 
-        configurarMapa(lastLocation.getLatitude(),lastLocation.getLongitude());
+        configurarMapa(lastLocation.getLatitude(), lastLocation.getLongitude());
+        Toast.makeText(this,"latitud: "+ String.valueOf(lastLocation.getLatitude())+"longitud: "+String.valueOf(lastLocation.getLongitude()), Toast.LENGTH_SHORT).show();
         //setLocalizacion(lastLocation);
     }
 
@@ -583,5 +611,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, "Aplicacion pausada", Toast.LENGTH_SHORT).show();
         desactivarLocalizacion();
     }*/
+
+
 
 }

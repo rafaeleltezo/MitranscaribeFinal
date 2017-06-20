@@ -29,7 +29,7 @@ public interface iMainActivity {
     public void actualizarLocalizacion();
     public void startLocationUpdates();
     public void desactivarLocalizacion();
-    public void addPosicionBus(double latitud, double longitud, String titulo,String estado);
+    public void addPosicionBus(double latitud, double longitud, String titulo,String estado,String idMarcador);
     public void refrescarMarcadorBus();
     public void addPosicionEstacion(double latitud,double longitud,String titulo);
     public void refrescarMarcadorParaderos();
