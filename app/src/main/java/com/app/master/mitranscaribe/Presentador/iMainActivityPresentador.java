@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public interface iMainActivityPresentador {
     public void establecerFragmentMapa();
     public void limitesMapa();
-    public ArrayList<Coordenadas>obteberCoordenadas();
     public void establecerGooglePlay();
     public void establecerPermisos();
     public void actualizarUbicacion();

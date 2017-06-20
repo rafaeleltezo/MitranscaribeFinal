@@ -57,11 +57,15 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
         iMainActivity.marcarLimites();
     }
 
-    @Override
-    public ArrayList<Coordenadas> obteberCoordenadas() {
+
+
+    public ArrayList<Coordenadas> getCoordenadasMapa() {
         return coordenadasMapa;
     }
 
+    public void setCoordenadasMapa(ArrayList<Coordenadas> coordenadasMapa) {
+        this.coordenadasMapa = coordenadasMapa;
+    }
 
     @Override
     public void establecerPermisos() {
@@ -195,12 +199,13 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
         AdaptadorEnpointGoogle adaptador=new AdaptadorEnpointGoogle();
         Gson gson=adaptador.construyeJsonDeserializador();
         EnpointApiGoogleMaps enpoint=adaptador.establecerConexionGoogleMaps(gson);
-        Call<RespuestaCoordenadas> coordenadas=enpoint.getUbicacion("10.384199"+","+"-75.4583","10.3944652"+","+"-75.408415","AIzaSyDjjRBHOHlbzcFrVl_xQAK07u0EZyr19YQ");
+        Call<RespuestaCoordenadas> coordenadas=enpoint.getUbicacion(latitudOrigen+","+longitudOrigen,latitudDestino+","+longitudDestino,"AIzaSyDjjRBHOHlbzcFrVl_xQAK07u0EZyr19YQ");
         coordenadas.enqueue(new Callback<RespuestaCoordenadas>() {
             @Override
             public void onResponse(Call<RespuestaCoordenadas> call, Response<RespuestaCoordenadas> response) {
                 RespuestaCoordenadas respuesta=response.body();
-                coordenadasMapa=respuesta.getCoordenadas();
+                setCoordenadasMapa(respuesta.getCoordenadas());
+                iMainActivity.ira(getCoordenadasMapa());
                 Toast.makeText(context,String.valueOf(coordenadasMapa.get(0).getDistancia()), Toast.LENGTH_SHORT).show();
             }
 
@@ -209,6 +214,7 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
                 Toast.makeText(context, "Error al conectarse al servidor", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 

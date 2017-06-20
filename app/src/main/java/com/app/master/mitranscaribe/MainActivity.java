@@ -135,8 +135,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         buttonNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presentador.obtenerRutaGoogleMaps(10.384199,-75.4583,10.3944652,-75.408415);
-                //ira(presentador.obteberCoordenadas());
+               presentador.obtenerRutaGoogleMaps(10.384199,-75.4583,10.3868033,-75.4809854);
+
             }
         });
 
@@ -195,13 +195,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         this.marcadorParadero = marcadorParadero;
     }
 
-
+    @Override
     public void ira(ArrayList<Coordenadas> coordenadas) {
         PolylineOptions linea = new PolylineOptions();
         for (Coordenadas coordenada:coordenadas) {
             linea.add(new LatLng(coordenada.getLatitud(), coordenada.getLongitud()));
         }
         mapa.addPolyline(linea);
+
+
 
     }
 

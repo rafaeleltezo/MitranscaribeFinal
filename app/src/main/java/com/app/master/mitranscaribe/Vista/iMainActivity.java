@@ -2,9 +2,12 @@ package com.app.master.mitranscaribe.Vista;
 
 import android.location.Location;
 
+import com.app.master.mitranscaribe.Modelo.Coordenadas;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 /**
  * Created by Rafael p on 10/4/2017.
@@ -33,6 +36,7 @@ public interface iMainActivity {
     public void refrescarMarcadorBus();
     public void addPosicionEstacion(double latitud,double longitud,String titulo);
     public void refrescarMarcadorParaderos();
+    public void ira(ArrayList<Coordenadas> coordenadases);
 
 }
 
