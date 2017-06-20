@@ -15,7 +15,7 @@ public class AdaptadorEnpointGoogle {
 
     public EnpointApiGoogleMaps establecerConexionGoogleMaps(Gson gson){
         Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(ConstantesUrl.URLBASE)
+                .baseUrl("https://maps.googleapis.com")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         return retrofit.create(EnpointApiGoogleMaps.class);

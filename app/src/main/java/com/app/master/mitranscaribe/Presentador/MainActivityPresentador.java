@@ -174,7 +174,7 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
                 for (DataSnapshot datos:dataSnapshot.getChildren()) {
                     Bus bus=datos.getValue(Bus.class);
                     //Toast.makeText(context, bus.getNombre(), Toast.LENGTH_SHORT).show();
-                    iMainActivity.addPosicionBus(bus.getLatitud(),bus.getLongitud(),bus.getNombre(),bus.getEstado(),dataSnapshot.getKey());
+                    iMainActivity.addPosicionBus(bus.getLatitud(),bus.getLongitud(),bus.getNombre(),bus.getEstado(),"");
 
                 }
 
@@ -195,8 +195,7 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
         AdaptadorEnpointGoogle adaptador=new AdaptadorEnpointGoogle();
         Gson gson=adaptador.construyeJsonDeserializador();
         EnpointApiGoogleMaps enpoint=adaptador.establecerConexionGoogleMaps(gson);
-        Call<RespuestaCoordenadas> coordenadas=enpoint.getUbicacion(String.valueOf(latitudOrigen),
-                String.valueOf(longitudOrigen),String.valueOf(latitudDestino),String.valueOf(longitudDestino));
+        Call<RespuestaCoordenadas> coordenadas=enpoint.getUbicacion("10.384199"+","+"-75.4583","10.3944652"+","+"-75.408415","AIzaSyDjjRBHOHlbzcFrVl_xQAK07u0EZyr19YQ");
         coordenadas.enqueue(new Callback<RespuestaCoordenadas>() {
             @Override
             public void onResponse(Call<RespuestaCoordenadas> call, Response<RespuestaCoordenadas> response) {

@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 presentador.obtenerRutaGoogleMaps(10.384199,-75.4583,10.3944652,-75.408415);
-                ira(presentador.obteberCoordenadas());
+                //ira(presentador.obteberCoordenadas());
             }
         });
 
@@ -166,13 +166,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
         configurarMapa(10.4027901, -75.5156382);
+       /*
         if (chequearPermiso()) {
             presentador.agregarUbicacionEstacion();
             presentador.agregarUbicacionBuses();
             presentador.establecerGooglePlay();
             presentador.actualizarUbicacion();
             presentador.limitesMapa();
-        }
+        }*/
 
     }
 
