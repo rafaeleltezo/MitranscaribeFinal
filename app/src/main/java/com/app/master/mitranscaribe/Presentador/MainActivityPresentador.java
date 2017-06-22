@@ -199,7 +199,8 @@ public class MainActivityPresentador  implements iMainActivityPresentador{
         AdaptadorEnpointGoogle adaptador=new AdaptadorEnpointGoogle();
         Gson gson=adaptador.construyeJsonDeserializador();
         EnpointApiGoogleMaps enpoint=adaptador.establecerConexionGoogleMaps(gson);
-        Call<RespuestaCoordenadas> coordenadas=enpoint.getUbicacion(latitudOrigen+","+longitudOrigen,latitudDestino+","+longitudDestino,"AIzaSyDjjRBHOHlbzcFrVl_xQAK07u0EZyr19YQ");
+        Call<RespuestaCoordenadas> coordenadas=enpoint.getUbicacion(latitudOrigen+","+longitudOrigen,latitudDestino+","
+                +longitudDestino,"AIzaSyDjjRBHOHlbzcFrVl_xQAK07u0EZyr19YQ","driving");
         coordenadas.enqueue(new Callback<RespuestaCoordenadas>() {
             @Override
             public void onResponse(Call<RespuestaCoordenadas> call, Response<RespuestaCoordenadas> response) {

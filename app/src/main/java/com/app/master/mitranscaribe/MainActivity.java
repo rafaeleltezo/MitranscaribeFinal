@@ -59,6 +59,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.database.ChildEventListener;
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private AdRequest adRequest;
     private AdView adView;
     private Toolbar toolbar;
+    private Polyline polyline;
 
     /*
     private Location localizacion;
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         buttonNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               presentador.obtenerRutaGoogleMaps(10.384199,-75.4583,10.3868033,-75.4809854);
+               presentador.obtenerRutaGoogleMaps(10.3826156,-75.4608272,10.3826156,-75.4608272);
 
             }
         });
@@ -166,14 +168,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
         configurarMapa(10.4027901, -75.5156382);
-       /*
+
         if (chequearPermiso()) {
-            presentador.agregarUbicacionEstacion();
-            presentador.agregarUbicacionBuses();
-            presentador.establecerGooglePlay();
-            presentador.actualizarUbicacion();
-            presentador.limitesMapa();
-        }*/
+            //presentador.agregarUbicacionEstacion();
+            //presentador.agregarUbicacionBuses();
+            //presentador.establecerGooglePlay();
+            //presentador.actualizarUbicacion();
+            //presentador.limitesMapa();
+
+        }
 
     }
 
@@ -201,8 +204,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         for (Coordenadas coordenada:coordenadas) {
             linea.add(new LatLng(coordenada.getLatitud(), coordenada.getLongitud()));
         }
-        mapa.addPolyline(linea);
+        polyline=mapa.addPolyline(linea);
 
+        
 
 
     }
